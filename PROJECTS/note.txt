@@ -1,0 +1,161 @@
+//node index.js
+const express = require('express')
+const mysql = require("mysql");
+const cors = require('cors')
+const multer = require('multer') //http://expressjs.com/en/resources/middleware/multer.html npm install --save multer
+ 
+const app = express()
+app.use(cors())
+app.use(express.json())
+ 
+const con = mysql.createConnection({
+    user: "root",
+    host: "localhost",
+    password: "",
+    database: "nodejsdb"
+})
+ 
+con.connect(function(err) {
+    if(err) {
+        console.log("Error in Connection");
+    } else {
+        console.log("Connected");
+    }
+})
+ 
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    return cb(null, "./public/images")
+  },
+  filename: function (req, file, cb) {
+    return cb(null, `${Date.now()}_${file.originalname}`)
+  }
+})
+ 
+const upload = multer({storage})
+ 
+//app.post('/upload', upload.single('file'), (req, res) => {
+//  console.log(req.body)
+//  console.log(req.file)
+//  return res.json({Status: "Success"});
+//})
+ 
+app.post('/create',upload.single('file'), (req, res) => {
+    const sql = "INSERT INTO employee (`name`,`email`,`address`, `salary`,`image`) VALUES (?)"; 
+    const values = [
+        req.body.name,
+        req.body.email,
+        req.body.address,
+        req.body.salary, 
+        req.file.filename
+    ]
+    con.query(sql, [values], (err, result) => {
+        if(err) return res.json({Error: "Error singup query"});
+        return res.json({Status: "Success"});
+    })
+})
+ 
+app.listen(3001, () => {
+  console.log("Server is running")
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//C:\react-js\my-app\src\App.js
+import React, { useState } from "react"
+import axios from 'axios'
+ 
+function App() {
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [address, setAddress] = useState("");
+    const [salary, setSalary] = useState("");
+    const [file, setFile] = useState()
+    const [msg, setMsg] = useState("");
+       
+    const upload = () => {
+        const formData = new FormData()
+        formData.append("name", name);
+        formData.append("email", email);
+        formData.append("address", address);
+        formData.append("salary", salary);
+        formData.append('file', file)
+        axios.post('http://localhost:3001/create',formData )
+        .then((response) => {
+            console.log(response);
+            if(response.data.Status === 'Success') {
+                setMsg("File Successfully Uploaded");
+            }else{
+                setMsg("Error");
+            }
+        })
+        .catch(er => console.log(er))
+    }
+    return (
+    <div className="container" style={{paddingTop: 60}}>
+    <div className="row"><h1>React JS Node Express JS Upload File with Mysql Insert data</h1>
+        <div className="col-12">
+            <label className="form-label">Name</label>
+            <input type="text" className="form-control" placeholder='Enter Name' autoComplete='off'
+            onChange={(e) => setName(e.target.value)}/> 
+        </div>
+        <div className="col-12">
+            <label className="form-label">Email</label>
+            <input type="text" className="form-control" placeholder='Enter Email' autoComplete='off'
+            onChange={(e) => setEmail(e.target.value)}/> 
+        </div>
+        <div className="col-12">
+            <label className="form-label">Address</label>
+            <input type="text" className="form-control" placeholder='Enter Address' autoComplete='off'
+            onChange={(e) => setAddress(e.target.value)}/> 
+        </div>
+        <div className="col-12">
+            <label className="form-label">Salary</label>
+            <input type="text" className="form-control" placeholder='Enter salary' autoComplete='off'
+            onChange={(e) => setSalary(e.target.value)}/> 
+        </div>
+                 
+        <div className="col-12">
+          <label className="form-label">Upload File</label>
+          <input className="form-control form-control-lg" type="file" onChange={(e) => setFile(e.target.files[0])}/>
+        </div>
+         
+      <button type="button" className="btn btn-primary btn-lg" onClick={upload} style={{marginTop: '20px'}}>Upload</button>
+      <h1 style={{fontSize: '15px', textAlign: 'center', marginTop: '20px'}}>{msg}</h1>
+    </div>
+    </div>
+  )
+}
+ 
+export default App;

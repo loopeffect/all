@@ -1,0 +1,58 @@
+.login-button{
+    background-color:rgb(12, 117, 52);
+    color:antiquewhite;
+    font-size: 18px;
+    padding: 7px 16px;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: 0.3s background-color;
+    }
+.login-button:hover{
+    background-color:rgb(117, 148, 76);
+    color:antiquewhite;
+
+}
+.navbar-toggler {
+    border: none;
+    font-size: 19px;
+    outline: none;   
+}
+.navbar-toggler:focus, .btn-close:focus {
+    box-shadow: none;
+    outline: none;   
+}
+.nav-link{
+    font-weight: 500;
+    color: beige;
+}
+.fullscreenhome{
+    background: url('Homeback.jpg') no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh;
+  }
+  .frontcol {
+    margin-top: 23px;
+    color: beige;
+    font-weight: 500;
+    
+}
+.form-control{
+    border-radius: 50px;
+}
+.form-group{
+    font-weight: 500;
+}
+.formsubmitbtn{
+    background-color:rgb(12, 117, 52);
+    color:antiquewhite;
+    font-size: 18px;
+    padding: 7px 16px;
+    border-radius: 50px;
+    text-decoration: none;
+    margin-bottom: 30px;
+       
+}
+.formsubmitbtn:focus{
+    box-shadow: none;
+    outline: none;   
+}

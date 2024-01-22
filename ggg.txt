@@ -1,0 +1,25 @@
+-- Create a new table
+CREATE TABLE employees (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    salary DECIMAL(10, 2)
+);
+
+-- Insert data into the table
+INSERT INTO employees (id, name, salary) VALUES (1, 'John Doe', 50000);
+INSERT INTO employees (id, name, salary) VALUES (2, 'Jane Smith', 60000);
+
+-- Select all rows from the table
+SELECT * FROM employees;
+
+-- Update a record
+UPDATE employees SET salary = 55000 WHERE id = 1;
+
+-- Select updated data
+SELECT * FROM employees;
+
+-- Delete a record
+DELETE FROM employees WHERE id = 2;
+
+-- Select remaining data
+SELECT * FROM employees;

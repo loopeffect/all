@@ -23,3 +23,101 @@ DELETE FROM employees WHERE id = 2;
 
 -- Select remaining data
 SELECT * FROM employees;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// server.js
+
+const express = require('express');
+const mysql = require('mysql');
+const app = express();
+
+const connection = mysql.createConnection({
+  host: 'your-mysql-host',
+  user: 'your-mysql-username',
+  password: 'your-mysql-password',
+  database: 'your-mysql-database',
+});
+
+connection.connect();
+
+app.get('/images', (req, res) => {
+  const query = 'SELECT * FROM images';
+  
+  connection.query(query, (error, results) => {
+    if (error) throw error;
+
+    res.json(results);
+  });
+});
+
+const PORT = 3001;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ImageGallery.js
+
+import React, { useState, useEffect } from 'react';
+
+const ImageGallery = () => {
+  const [images, setImages] = useState([]);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/images');
+        const data = await response.json();
+        setImages(data);
+      } catch (error) {
+        console.error('Error fetching images:', error);
+      }
+    };
+
+    fetchImages();
+  }, []);
+
+  return (
+    <div>
+      <h1>Image Gallery</h1>
+      <div>
+        {images.map(image => (
+          <img key={image.id} src={image.url} alt={image.description} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default ImageGallery;
